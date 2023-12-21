@@ -1,24 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
 
+const ChildComponent = ({ onInputChange }) => {
+
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    onInputChange(inputValue); // Parent'a değeri iletilir
+  };
+
+  return (
+    <div>
+      {/* Input elemanı ve onChange olayı */}
+      <input
+        type="text"
+        placeholder="Child Input"
+        onChange={handleInputChange}
+      />
+    </div>
+  )
+}
+function ParentComponent() {
+
+  const [childInputValue, setChildInputValue] = useState('');
+
+  // Callback fonksiyonu: Child bileşenden gelen input değerini alır
+  const handleChildInputChange = (value: any) => {
+    setChildInputValue(value);
+  };
+  return (
+    <div>
+      <ChildComponent onInputChange={handleChildInputChange} />
+      <p>Child Input Değeri (Parent): {childInputValue}</p>
+    </div>
+  )
+}
+
 function App() {
+  // Parent bileşenin state'i
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ParentComponent></ParentComponent>
     </div>
   );
 }
